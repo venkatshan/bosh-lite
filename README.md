@@ -78,69 +78,25 @@ Installation instructions for different Vagrant providers:
 1. Start Vagrant from the base directory of this repository, which contains the Vagrantfile. The most recent version of the BOSH Lite boxes will be downloaded by default from the Vagrant Cloud when you run `vagrant up`. If you have already downloaded an older version you will be warned that your version is out of date.
 
     ```
-    $ vagrant up --provider=virtualbox
+    $ vagrant up 
     ```
 
-1. When you are not using your VM we recommmend to *Pause* the VM from the VirtualBox UI (or use `vagrant suspend`), so that VM can be later simply resumed after your machine goes to sleep or gets rebooted. Otherwise, your VM will be halted by the OS and you will have to recreate previously deployed software.
 
-1. Target the BOSH Director. When prompted to log in, use admin/admin.
-
-    ```
-    # if behind a proxy, exclude both the VM's private IP and xip.io by setting no_proxy (xip.io is introduced later)
-    $ export no_proxy=xip.io,192.168.50.4
-
-    $ bosh target 192.168.50.4 lite
-    Target set to `Bosh Lite Director'
-    Your username: admin
-    Enter password: *****
-    Logged in as `admin'
-    ```
-
-1. Add a set of route entries to your local route table to enable direct Warden container access every time your networking gets reset (e.g. reboot or connect to a different network). Your sudo password may be required.
-
-    ```
-    $ bin/add-route
-    ```
-
-### Customizing the Local VM IP
-
-The local VMs (virtualbox, vmware providers) will be accessible at `192.168.50.4`. You can optionally change this IP, uncomment the `private_network` line in the appropriate provider and change the IP address.
-
-```
-  config.vm.provider :virtualbox do |v, override|
-    # To use a different IP address for the bosh-lite director, uncomment this line:
-    # override.vm.network :private_network, ip: '192.168.59.4', id: :local
-  end
-```
-
-### CA certificate
-
-CA certificate that can be used with the BOSH CLI is saved in `ca/certs/ca.crt`. It's created for `192.168.50.4` and `*.sslip.io`.
-
-## Deploy Cloud Foundry
-
-See [deploying Cloud Foundry documentation](http://docs.cloudfoundry.org/deploying/boshlite/deploy_cf_boshlite.html) for detailed instructions. Alternatively, check out [CF Release](https://github.com/cloudfoundry/cf-release) as `~/workspace/cf-release` and return to the `bosh-lite` repository and run `./bin/provision_cf`.
-
-## Troubleshooting
-
-* [See troubleshooting doc](docs/troubleshooting.md) for solutions to common problems
-
-## Upgrading the BOSH Lite VM
-
-If you wish to upgrade the BOSH Lite VM, you can run the following commands from the root of the `bosh-lite` directory. Make sure you have the latest version of this repository checked out. WARNING: these operations are destructive, and essentially amount to starting from scratch.
-
-```
-$ git pull
-$ vagrant box update
-$ vagrant destroy
-$ vagrant up --provider=DESIRED_PROVIDER
-```
-
-## Miscellaneous
-
-* [Warden CPI's cloud properties](http://bosh.io/docs/warden-cpi.html) for configuring deployment manifest
-* [bosh cck documentation](docs/bosh-cck.md) for restoring deployments after VM reboot
-* [bosh ssh documentation](docs/bosh-ssh.md) for SSH into deployment jobs
-* [Offline documentation](docs/offline-dns.md) to configure BOSH lite firewall rules
-* [xip.io](http://xip.io) to access local IPs via DNS
-* [Dev documentation](docs/dev.md) to find out how to build custom bosh-lite boxes
+2. Stop/Start. 
+      It is recommended to use vagrant {suspend/resume}
+      
+      After statring the VM. Login and issue folling commands
+       ```
+         ~vagrant/bosh-lite/bin/add-route
+         bosh cck
+       ```
+         
+ 3. Deploy Play application from windows
+       ```
+        cf api https://api.bosh-lite.com
+        cf auth admin admin
+        cf push {application-name} -p target\universal\{application-name}.zip
+        
+        Goto {application-name}.bosh-lite.com to access the application
+       ```
+      
