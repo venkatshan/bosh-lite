@@ -1,7 +1,13 @@
 
 
 
-Install [Vagrant](http://www.vagrantup.com/downloads.html)
+
+
+
+### Install and Boot a Virtual Machine
+
+## Make sure your machine has at least 8GB RAM, and 100GB free disk space. Smaller configurations may work.
+1. Install [Vagrant](http://www.vagrantup.com/downloads.html)
 
     Known working version:
 
@@ -9,19 +15,6 @@ Install [Vagrant](http://www.vagrantup.com/downloads.html)
     $ vagrant --version
     Vagrant 1.9.5
     ```
-
-
-
-### Install and Boot a Virtual Machine
-
-Installation instructions for different Vagrant providers:
-
-* VirtualBox (below)
-* [AWS](docs/aws-provider.md)
-
-#### Using the VirtualBox Provider
-
-1. Make sure your machine has at least 8GB RAM, and 100GB free disk space. Smaller configurations may work.
 
 1. Install [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 
